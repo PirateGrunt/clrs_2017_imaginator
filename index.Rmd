@@ -1,0 +1,642 @@
+---
+author: "Brian A. Fannin"
+date: "September ??, 2017"
+bibliography: bibliography.bib
+output: 
+  revealjs::revealjs_presentation:
+    self_contained: false
+    css: revealOpts.css
+    theme: sky
+    transition: slide
+    center: false
+    reveal_plugins: ["notes", "zoom"]
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+---
+
+```{r include=FALSE}
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(knitr))
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+# imaginator: An R Package for Detailed Claim Simulation
+
+<aside class="notes">
+Assuming you already know R
+Why does this package exist?
+How to use the package
+Compare
+</aside>
+
+# Why does this package exist?
+
+## Here's why
+
+* Stanard [@Stanard] is no longer on the syllabus - let's teach these young kids how it's done.
+* Venter quote
+* Nothing comparable to the Meyers and Shi research database for individual claims
+* Brian thinks everything should be a package
+
+## About the package
+
+* On CRAN, [click here](https://cran.r-project.org/package=imaginator), easy install
+* There will probably be updates
+* Please report bugs and suggest new features! [click me](https://github.com/PirateGrunt/imaginator/issues/new)
+
+```{r, eval=FALSE}
+# install official release
+install.packages("imaginator")
+
+#install beta
+devtools::install_github("PirateGrunt/imaginator")
+```
+
+```{r}
+library(imaginator)
+```
+
+# Function helpers
+
+## Function helpers
+
+* Use functions to create functions
+* Function parameters are vectorized to return a list of functions
+
+```{r }
+pois5 <- PoissonHelper(5)
+pois10 <- PoissonHelper(10)
+class(pois10)
+```
+
+## How does that look?
+
+```{r }
+library(ggplot2)
+set.seed(1234)
+
+dfClaims <- rbind(data.frame(Group = "A", Claims = pois5(500))
+                  , data.frame(Group = "B", Claims = pois10(500)))
+
+plt <- ggplot(dfClaims, aes(Claims, fill = Group))
+plt <- plt + geom_histogram(
+    binwidth = 1, color = "black", alpha = 0.8, position = "identity"
+  )
+```
+
+## 
+
+```{r echo=FALSE}
+plt
+```
+
+## Vectorization
+
+Passing in a vector of parameters will return a list of functions
+
+```{r}
+pois <- PoissonHelper(c(5, 10))
+summary(pois)
+```
+
+## Simulating across the list
+
+```{r }
+pois <- PoissonHelper(c(5, 10))
+lapply(pois, function(x){
+  summary(x(50))
+})
+```
+
+# Simulating policies
+
+## Simulate Policies
+
+```{r}
+set.seed(1234)
+dfPolicies <- SimulatePolicies(N = 2, NumYears = 5)
+```
+
+```{r echo = FALSE}
+dfPolicies %>% arrange(PolicyEffectiveDate) %>% head() %>% kable()
+```
+
+## Growth and retention
+
+* Retention is a number between 0 and 1, representing the % of policies which renew
+* Growth is a non-negative number indicating the portion of new policies relative to the expiring book.
+
+## Growth and retention equal
+
+```{r}
+dfPolicies <- SimulatePolicies(N = 100
+                               , NumYears = 5
+                               , Retention = 0.9
+                               , Growth = 0.1)
+```
+
+## 
+
+```{r echo=FALSE}
+SummarizeNewBizByYear <- function(dfPolicies){
+  dfPolicies <- dfPolicies %>% 
+  group_by(PolicyholderID) %>% 
+  arrange(PolicyEffectiveDate) %>% 
+  mutate(RenewalSeq = row_number()
+         , New = RenewalSeq == 1) %>% 
+  mutate(PolicyYear = lubridate::year(PolicyEffectiveDate))
+  
+  dfPolicies  
+}
+
+PlotNewBizByYear <- function(df){
+  plt <- ggplot(df, aes(PolicyYear)) + geom_bar(aes(fill = New))
+  plt <- plt + scale_x_continuous(breaks = unique(df$PolicyYear))
+  plt
+}
+```
+
+```{r echo=FALSE}
+plt <- dfPolicies %>% 
+  SummarizeNewBizByYear() %>% 
+  PlotNewBizByYear()
+
+plt
+```
+
+## Gradually expanding book
+
+```{r}
+dfPolicies <- SimulatePolicies(N = 50
+                               , NumYears = 10
+                               , Retention = 0.9
+                               , Growth = 0.2)
+```
+
+## 
+
+```{r echo=FALSE}
+plt <- dfPolicies %>% 
+  SummarizeNewBizByYear() %>% 
+  PlotNewBizByYear()
+
+plt
+```
+
+## Gradually contracting book
+
+```{r}
+dfPolicies <- SimulatePolicies(N = 100
+                               , NumYears = 10
+                               , Retention = 0.8
+                               , Growth = 0.1)
+```
+
+## 
+
+```{r echo=FALSE}
+plt <- dfPolicies %>% 
+  SummarizeNewBizByYear() %>% 
+  PlotNewBizByYear()
+
+plt
+```
+
+## Complete turnover every year
+
+```{r}
+dfPolicies <- SimulatePolicies(N = 100
+                               , NumYears = 10
+                               , Retention = 0.0
+                               , Growth = 1.0)
+```
+
+## 
+
+```{r echo=FALSE}
+plt <- dfPolicies %>% 
+  SummarizeNewBizByYear() %>% 
+  PlotNewBizByYear()
+
+plt
+```
+
+## Different growth and retention by year
+
+Note these differences are deterministic
+
+```{r warning=FALSE}
+dfPolicies <- SimulatePolicies(
+    N = 100
+  , NumYears = 10
+  , Retention = seq(length.out = 9, from = 0.95, to = 0.5)
+  , Growth = seq(length.out = 9, from = 0.25, to = 0.05))
+
+```
+
+## 
+
+```{r echo=FALSE}
+plt <- dfPolicies %>% 
+  SummarizeNewBizByYear() %>% 
+  PlotNewBizByYear()
+
+plt
+```
+
+## Stochastic growth
+
+```{r}
+dfPolicies <- SimulatePolicies(N = 100
+                               , NumYears = 10
+                               , Retention = 0.9
+                               , Growth = runif(9, .05, .35))
+```
+
+## 
+
+```{r echo=FALSE}
+plt <- dfPolicies %>% 
+  SummarizeNewBizByYear() %>% 
+  PlotNewBizByYear()
+
+plt
+```
+
+## Additional columns
+
+Used to add descriptive names for the set of policies. Theses may then be bound into a single data frame.
+
+Below, we simulate decline in one state and rapid growth in another.
+
+```{r}
+dfGL_CA <- SimulatePolicies(
+  N = 500, NumYears = 5, Retention = 0.75, Growth = .01
+  , AdditionalColumns = list(Line = "GL", State = "CA"))
+
+dfGL_NY <- SimulatePolicies(
+  N = 50, NumYears = 5, Retention = 0.9, Growth = .5
+  , AdditionalColumns = list(Line = "GL", State = "NY"))
+
+dfGL <- dplyr::bind_rows(dfGL_CA, dfGL_NY)
+```
+
+##
+
+```{r echo=FALSE}
+dfGL <- dfGL %>%
+  mutate(PolicyYear = lubridate::year(PolicyEffectiveDate))
+
+plt <- ggplot(dfGL, aes(PolicyYear)) + geom_bar(aes(fill = State))
+plt <- plt + scale_x_continuous(breaks = unique(dfGL$PolicyYear))
+plt
+```
+
+# Claims by wait time
+
+## The Algorithm
+
+* Start with a data frame of policies.
+* For each row, simulate number of claims
+* For each claim, simulate the number of transactions
+* Simulate lags until occurrence, lag until report, lag until transaction
+* Each transaction has a random severity
+
+## Get some policies
+
+```{r}
+set.seed(12345)
+dfPolicy <- SimulatePolicies(2, 2001:2005)
+```
+
+```{r echo=FALSE}
+dfPolicy %>% 
+  head(5) %>% 
+  knitr::kable()
+```
+
+## Now create some transactions
+
+```{r}
+dfClaimTransactions <- ClaimsByWaitTime(
+    dfPolicy
+  , ClaimFrequency = FixedHelper(2)
+  , PaymentFrequency = FixedHelper(3)
+  , OccurrenceWait = FixedHelper(10)
+  , ReportWait = FixedHelper(5)
+  , PayWait = FixedHelper(5)
+  , PaySeverity = FixedHelper(50))
+```
+
+## 
+
+```{r echo=FALSE}
+dfClaimTransactions %>% 
+  select(-PolicyExpirationDate, -Exposure, -PolicyholderID, -NumberOfPayments) %>% 
+  head(5) %>% 
+  kable()
+```
+
+## Stochastic amounts
+
+```{r}
+dfClaimTransactions <- ClaimsByWaitTime(
+    dfPolicy
+  , ClaimFrequency = FixedHelper(2)
+  , PaymentFrequency = PoissonHelper(2)
+  , OccurrenceWait = PoissonHelper(10)
+  , ReportWait = PoissonHelper(5)
+  , PayWait = PoissonHelper(5)
+  , PaySeverity = LognormalHelper(log(50), 0.5*log(50)))
+```
+
+## 
+
+```{r echo=FALSE}
+plt <- ggplot(filter(dfClaimTransactions, !is.na(PaymentDate))
+              , aes(PaymentDate, PaymentAmount
+                    , color=as.factor(ClaimID)
+                    , shape = as.factor(PolicyholderID))) + geom_point(size = 3)
+plt <- plt + scale_y_continuous(labels = scales::dollar)
+plt
+```
+
+```{r echo=FALSE}
+dfClaimTransactions <- dfClaimTransactions %>% 
+  mutate(OccToPayment = PaymentDate - OccurrenceDate
+         , ReportToPayment = PaymentDate - ReportDate
+         , PolicyYear = lubridate::year(PolicyEffectiveDate))
+
+# plt <- ggplot(filter(dfClaimTransactions, ))
+```
+
+## More claims, please
+
+```{r}
+dfPolicy <- SimulatePolicies(1000, 2001:2005)
+
+dfClaimTransactions <- ClaimsByWaitTime(
+    dfPolicy
+  , ClaimFrequency = PoissonHelper(2 * seq.int(5))
+  , PaymentFrequency = PoissonHelper(2)
+  , OccurrenceWait = PoissonHelper(10)
+  , ReportWait = PoissonHelper(5)
+  , PayWait = PoissonHelper(5)
+  , PaySeverity = LognormalHelper(log(50), 0.5*log(50))) %>% 
+  mutate(PolicyYear = lubridate::year(PolicyEffectiveDate))
+
+dfPolicyClaims <- dfClaimTransactions %>% 
+  mutate(NumClaims = ifelse(is.na(ClaimID), 0, 1)) %>% 
+  group_by(PolicyholderID, PolicyYear) %>% 
+  summarize(NumClaims = sum(NumClaims))
+```
+
+```{r}
+lapply(split(dfPolicyClaims, dfPolicyClaims$PolicyYear), function(x){
+  summary(x$NumClaims)
+})
+```
+
+
+##
+
+```{r}
+plt <- ggplot(dfClaimTransactions, aes(NumberOfPayments)) + geom_histogram(bins=10)
+plt <- plt + facet_wrap(~ PolicyYear)
+plt
+```
+
+# Claims by lag
+
+## Claims by lag
+
+* Basically chain ladder for individual claims
+* Distinguishes bewtten IBNYR and IBNER
+* My biggest complaint is that a structure - evaluation dates - is imposed on our data
+* Could be a gateway drug to more advanced individual claim models
+* Lag is ambiguously defined - on purpose. It could be policy year or accident year.
+* Does it make sense? To me, not so much. _However_ just because I can't see the math, doesn't mean that it isn't there.
+
+## First generate IBNYR data
+
+```{r}
+set.seed(12345)
+dfPolicy <- SimulatePolicies(2, 2001:2004)
+
+dfIBNYR_Fixed <- ClaimsByFirstReport(
+    dfPolicy
+  , Frequency = FixedHelper(4:1)
+  , PaymentSeverity = FixedHelper(rep(250, 4))
+  , Lags = 1:4)
+```
+
+## 
+
+```{r}
+dfIBNYR_Fixed %>% 
+  dplyr::filter(PolicyholderID == 1
+                , lubridate::year(PolicyEffectiveDate) == 2001) %>% 
+  arrange(ClaimID) %>% 
+  head(10) %>% 
+  kable()
+```
+
+## Our IBNYR count triangle - complete
+
+```{r echo=FALSE}
+dfIBNYR_Triangle <- dfIBNYR_Fixed %>%
+  mutate(PolicyYear = lubridate::year(PolicyEffectiveDate)) %>% 
+  group_by(PolicyholderID, Lag, PolicyYear) %>% 
+  summarise(ClaimCount = n()
+            , PaymentAmount = sum(PaymentAmount)) 
+```
+
+```{r echo=FALSE}
+dfIBNYR_Triangle %>% 
+  select(-PaymentAmount) %>% 
+  tidyr::spread(Lag, ClaimCount) %>% 
+  head(10) %>% 
+  kable()
+```
+
+## ... and incomplete
+
+```{r echo=FALSE}
+dfIBNYR_Triangle %>% 
+  mutate(EffectiveDate = PolicyYear + Lag - 1) %>% 
+  filter(EffectiveDate <= 2004) %>% 
+  select(-PaymentAmount) %>% 
+  select(-EffectiveDate) %>% 
+  tidyr::spread(Lag, ClaimCount, fill = "") %>% 
+  head(10) %>% 
+  kable()
+```
+
+## Payments
+
+```{r}
+dfIBNYR_Triangle %>% 
+  mutate(EffectiveDate = PolicyYear + Lag - 1) %>% 
+  filter(EffectiveDate <= 2004) %>% 
+  select(-EffectiveDate) %>% 
+  select(-ClaimCount) %>% 
+  tidyr::spread(Lag, PaymentAmount, fill = "") %>% 
+  head(10) %>% 
+  kable()
+```
+
+## Now develop the claims
+
+ClaimsByLinkRatio takes a data frame of claims by Lag and develops them as appropriate.
+
+```{r}
+dfClaimsFixed <- ClaimsByLinkRatio(
+    dfIBNYR_Fixed
+  , Links = FixedHelper(c(2, 1.5, 1.25))
+  , Lags = 1:4)
+```
+
+## 
+
+Note that we now have more than one observation for each claim
+
+```{r echo=FALSE}
+dfClaimsFixed %>% 
+  dplyr::filter(ClaimID == 1) %>% 
+  kable()
+```
+
+## Add some variation
+
+```{r }
+dfIBNYR_Variable <- ClaimsByFirstReport(
+    dfPolicy
+  , Frequency = PoissonHelper(4:1)
+  , PaymentSeverity = GammaHelper(rep(1500, 4), rep(5,4))
+  , Lags = 1:4)
+
+dfClaimsVariable <- ClaimsByLinkRatio(
+    dfIBNYR_Variable
+  , Links = GammaHelper(c(10, 15, 20), c(5, 10, 18))
+  , Lags = 1:4)
+```
+
+##
+
+```{r}
+
+```
+
+# Making triangles
+
+## Claims by lag
+
+You're pretty much done, unless you want to aggregate the results
+
+```{r}
+dfAgg <- dfClaimsVariable %>% 
+  mutate(PolicyYear = lubridate::year(PolicyEffectiveDate)) %>% 
+  dplyr::filter(PolicyYear + Lag - 1 <= 2004) %>% 
+  group_by(PolicyYear, Lag) %>% 
+  summarise(Paid = sum(PaymentAmount)
+            , ClaimCount = n())
+```
+
+## 
+
+```{r echo=FALSE}
+dfAgg %>% 
+  kable()
+```
+
+## Claims by wait time
+
+```{r}
+
+```
+
+## But, hang on
+
+Why are you creating triangles?
+
+Individual claim data contains all of the features that you need to build a model.
+
+## 
+
+Create a chain ladder by forming cumulative amounts and lagging
+
+```{r }
+dfChainLadder <- dfClaimsVariable %>% 
+  arrange(ClaimID, Lag) %>% 
+  group_by(ClaimID) %>% 
+  mutate(CumulativePaid = cumsum(PaymentAmount)
+         , PriorCumulative = dplyr::lag(CumulativePaid))
+```
+
+## How does that look?
+
+```{r echo=FALSE, warning=FALSE}
+pltIndividual <- ggplot(dplyr::filter(dfChainLadder, Lag == 2), aes(PriorCumulative, CumulativePaid)) + geom_point()
+pltIndividual <- pltIndividual + geom_smooth(method = "lm", formula = y ~ 0 + x)
+pltIndividual <- pltIndividual + ggplot2::ggtitle("Individual claim development from Lag 1 -> Lag 2")
+pltIndividual
+```
+
+## And aggregate
+
+```{r echo=FALSE}
+dfAggChain <- dfChainLadder %>% 
+  mutate(PolicyYear = lubridate::year(PolicyEffectiveDate)) %>% 
+  group_by(PolicyYear, Lag) %>% 
+  summarise(CumulativePaid = sum(CumulativePaid)
+            , PriorCumulative = sum(PriorCumulative, na.rm = TRUE))
+
+pltAgg <- ggplot(dplyr::filter(dfAggChain, Lag == 2), aes(PriorCumulative, CumulativePaid)) + geom_point()
+pltAgg <- pltAgg + geom_smooth(method = "lm", formula = y ~ 0 + x)
+pltAgg <- pltAgg + ggplot2::ggtitle("Aggregate claim development from Lag 1 -> Lag 2")
+pltAgg
+```
+
+## 
+
+```{r fig.height=3, echo=FALSE, warning=FALSE}
+pltIndividual
+pltAgg
+```
+
+##
+
+* We had to drop a number of points in the chart because they were IBNYR claims, i.e. they had no prior cumulative.
+* Common aggregate triangles miss this.
+
+## And a model
+
+```
+linkRatio_1_2 <- lm(CumulativePaid)
+```
+
+# Wrapping up
+
+## Go forth and simulate!
+
+* If you have individual claim data, __start using it!__
+* If you don't have enough, simulate as a starting point to study the dynamics
+* If you curious about "what if", `imaginator` can help you contemplate scenarios
+* Want more features? Make suggestions on GitHub: [click me](https://github.com/PirateGrunt/imaginator/issues/new)
+
+## Thank you!
+
+The source code for these slides may be found here: [where is this?]()
+
+## Some References
+
+<!-- Change the notes section to a bibliography -->
+
+* [Stanard paper]()
+* [Meyers and Shi]()
+* [Robertson]()
+
+## Bibliography
+
+* Read this: http://www.casact.org/pubs/forum/17spforumv2/01_Boor.pdf
