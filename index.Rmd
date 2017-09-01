@@ -4,21 +4,17 @@ bibliography: bibliography.bib
 date: "September ??, 2017"
 nocite: "@Vaughn, \n"
 output:
+  revealjs::revealjs_presentation:
+    css: ./css/revealOpts.css
+    self_contained: false
+    reveal_options:
+      previewLinks: true
+      slideNumber: true
+    theme: solarized
+    transition: slide
   tufte::tufte_handout:
     citation_package: natbib
     latex_engine: xelatex
-  revealjs::revealjs_presentation:
-    center: no
-    css: ./css/revealOpts.css
-    reveal_options:
-      previewLinks: yes
-      slideNumber: yes
-    reveal_plugins:
-    - notes
-    - zoom
-    self_contained: no
-    theme: solarized
-    transition: slide
 ---
 
 ```{r include=FALSE}
@@ -28,13 +24,6 @@ knitr::opts_chunk$set(collapse = TRUE, warning = FALSE, message = FALSE)
 ```
 
 # imaginator: An R Package for Detailed Claim Simulation
-
-<aside class="notes">
-Assuming you already know R
-Why does this package exist?
-How to use the package
-Compare
-</aside>
 
 # Introducing imaginator
 
