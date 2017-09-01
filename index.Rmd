@@ -5,14 +5,16 @@ bibliography: bibliography.bib
 output: 
   revealjs::revealjs_presentation:
     self_contained: false
-    css: revealOpts.css
-    theme: sky
+    css: ./css/revealOpts.css
+    theme: solarized
     transition: slide
     center: false
     reveal_plugins: ["notes", "zoom"]
     reveal_options:
       slideNumber: true
       previewLinks: true
+nocite: |
+  @Vaughn, 
 ---
 
 ```{r include=FALSE}
@@ -30,14 +32,21 @@ How to use the package
 Compare
 </aside>
 
-# Why does this package exist?
+# Introducing imaginator
 
-## Here's why
+## What is it?
 
-* Stanard [@Stanard] is no longer on the syllabus - let's teach these young kids how it's done.
-* Venter quote
+![definition](images/Definition.png)
+
+## Why does this package exist?
+
+* Stanard [-@Stanard] is no longer on the syllabus - let's teach these young kids how it's done.
 * Nothing comparable to the Meyers and Shi research database for individual claims
 * Brian thinks everything should be a package
+
+## From [@VenterTestingAssumptions]
+
+> The fact that Stanard used the simulation method consistent with the BF emergence pattern [...] suggests that actuaries may be more comfortable with the BF emergence assumptions than with those of the chain ladder. Or perhaps it just means that no one would be likely to think of simulating losses by the chain ladder method.
 
 ## About the package
 
@@ -313,7 +322,7 @@ dfPolicy <- SimulatePolicies(2, 2001:2005)
 ```{r echo=FALSE}
 dfPolicy %>% 
   head(5) %>% 
-  knitr::kable()
+  knitr::kable(row.names = FALSE)
 ```
 
 ## Now create some transactions
@@ -329,14 +338,16 @@ dfClaimTransactions <- ClaimsByWaitTime(
   , PaySeverity = FixedHelper(50))
 ```
 
-## 
+## And here they are
 
 ```{r echo=FALSE}
 dfClaimTransactions %>% 
-  select(-PolicyExpirationDate, -Exposure, -PolicyholderID, -NumberOfPayments) %>% 
-  head(5) %>% 
+  select(-PolicyEffectiveDate, -PolicyExpirationDate, -Exposure, -PolicyholderID, -NumberOfPayments) %>% 
+  head(9) %>% 
   kable()
 ```
+
+Some columns have been removed
 
 ## Stochastic amounts
 
@@ -359,6 +370,7 @@ plt <- ggplot(filter(dfClaimTransactions, !is.na(PaymentDate))
                     , color=as.factor(ClaimID)
                     , shape = as.factor(PolicyholderID))) + geom_point(size = 3)
 plt <- plt + scale_y_continuous(labels = scales::dollar)
+plt <- plt + guides(colour = guide_legend(title = 'ClaimID'), shape = guide_legend(title = 'Policyholder'))
 plt
 ```
 
@@ -380,9 +392,9 @@ dfClaimTransactions <- ClaimsByWaitTime(
     dfPolicy
   , ClaimFrequency = PoissonHelper(2 * seq.int(5))
   , PaymentFrequency = PoissonHelper(2)
-  , OccurrenceWait = PoissonHelper(10)
-  , ReportWait = PoissonHelper(5)
-  , PayWait = PoissonHelper(5)
+  , OccurrenceWait = PoissonHelper(180)
+  , ReportWait = PoissonHelper(90)
+  , PayWait = PoissonHelper(45)
   , PaySeverity = LognormalHelper(log(50), 0.5*log(50))) %>% 
   mutate(PolicyYear = lubridate::year(PolicyEffectiveDate))
 
@@ -391,6 +403,8 @@ dfPolicyClaims <- dfClaimTransactions %>%
   group_by(PolicyholderID, PolicyYear) %>% 
   summarize(NumClaims = sum(NumClaims))
 ```
+
+## 
 
 ```{r}
 lapply(split(dfPolicyClaims, dfPolicyClaims$PolicyYear), function(x){
@@ -401,7 +415,7 @@ lapply(split(dfPolicyClaims, dfPolicyClaims$PolicyYear), function(x){
 
 ##
 
-```{r}
+```{r echo=FALSE}
 plt <- ggplot(dfClaimTransactions, aes(NumberOfPayments)) + geom_histogram(bins=10)
 plt <- plt + facet_wrap(~ PolicyYear)
 plt
@@ -433,7 +447,7 @@ dfIBNYR_Fixed <- ClaimsByFirstReport(
 
 ## 
 
-```{r}
+```{r echo=FALSE}
 dfIBNYR_Fixed %>% 
   dplyr::filter(PolicyholderID == 1
                 , lubridate::year(PolicyEffectiveDate) == 2001) %>% 
@@ -475,7 +489,7 @@ dfIBNYR_Triangle %>%
 
 ## Payments
 
-```{r}
+```{r echo=FALSE}
 dfIBNYR_Triangle %>% 
   mutate(EffectiveDate = PolicyYear + Lag - 1) %>% 
   filter(EffectiveDate <= 2004) %>% 
@@ -522,12 +536,6 @@ dfClaimsVariable <- ClaimsByLinkRatio(
   , Lags = 1:4)
 ```
 
-##
-
-```{r}
-
-```
-
 # Making triangles
 
 ## Claims by lag
@@ -552,8 +560,47 @@ dfAgg %>%
 
 ## Claims by wait time
 
-```{r}
+We need to impose an evaluation date structure on the data
 
+```{r}
+first_eval <- min(dfClaimTransactions$PolicyEffectiveDate)
+lubridate::month(first_eval) <- 12
+lubridate::day(first_eval) <- 31
+
+last_eval <- max(dfClaimTransactions$PaymentDate, na.rm = TRUE)
+lubridate::month(last_eval) <- 12
+lubridate::day(last_eval) <- 31
+evalDates <- seq.Date(from = first_eval, to = last_eval, by = "year")
+evalDates
+```
+
+## And then aggregate
+
+Just a bit of jiu-jitsu
+
+```{r}
+ComposeDiagonal <- function(df, eval_date){
+  df <- df %>% 
+    dplyr::filter(PaymentDate <= eval_date) %>% 
+    mutate(PolicyYear = lubridate::year(PolicyEffectiveDate)
+           , Lag = lubridate::year(eval_date) - PolicyYear + 1) %>% 
+    group_by(PolicyYear, Lag) %>% 
+    summarise(PaymentAmount = sum(PaymentAmount, na.rm = TRUE))
+}
+
+dfTriangle <- lapply(evalDates, function(x){
+  ComposeDiagonal(dfClaimTransactions, x)
+})
+dfTriangle <- do.call(rbind, dfTriangle)
+```
+
+## And we have a triangle
+
+```{r echo=FALSE}
+dfTriangle %>% 
+  dplyr::filter(PolicyYear == 2001) %>% 
+  arrange(Lag) %>% 
+  kable()
 ```
 
 ## But, hang on
@@ -605,15 +652,15 @@ pltIndividual
 pltAgg
 ```
 
-##
+## And remember
 
 * We had to drop a number of points in the chart because they were IBNYR claims, i.e. they had no prior cumulative.
 * Common aggregate triangles miss this.
 
-## And a model
+## Triangles for wait time
 
-```
-linkRatio_1_2 <- lm(CumulativePaid)
+```{r}
+print("Put a plot of wait times in here")
 ```
 
 # Wrapping up
@@ -627,16 +674,6 @@ linkRatio_1_2 <- lm(CumulativePaid)
 
 ## Thank you!
 
-The source code for these slides may be found here: [where is this?]()
-
-## Some References
-
-<!-- Change the notes section to a bibliography -->
-
-* [Stanard paper]()
-* [Meyers and Shi]()
-* [Robertson]()
+The source code for these slides may be found here: [https://github.com/PirateGrunt/clrs_2017_imaginator](https://github.com/PirateGrunt/clrs_2017_imaginator)
 
 ## Bibliography
-
-* Read this: http://www.casact.org/pubs/forum/17spforumv2/01_Boor.pdf
