@@ -3,6 +3,6 @@ test/
 *_files/
 .Rproj.user/
 plugin/
-*.html
-/*.html
 .Rproj.user
+*.pdf
+*.bbl

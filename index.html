@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Brian A. Fannin" />
+  <title></title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="index_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="index_files/reveal.js-3.3.0.1/css/theme/solarized.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="css/revealOpts.css"/>
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section><section id="imaginator-an-r-package-for-detailed-claim-simulation" class="titleslide slide level1"><h1>imaginator: An R Package for Detailed Claim Simulation</h1></section></section>
+<section><section id="introducing-imaginator" class="titleslide slide level1"><h1>Introducing imaginator</h1></section><section id="what-is-it" class="slide level2">
+<h1>What is it?</h1>
+<p><img src="images/Definition.png" alt="definition" /></p>
+</section><section id="why-does-this-package-exist" class="slide level2">
+<h1>Why does this package exist?</h1>
+<ul>
+<li>Stanard <span class="citation" data-cites="Stanard">(1985)</span> is no longer on the syllabus - let’s teach these young kids how it’s done.</li>
+<li>Nothing comparable to the Meyers and Shi research database for individual claims</li>
+<li>Brian thinks everything should be a package</li>
+</ul>
+</section><section id="from-ventertestingassumptions" class="slide level2">
+<h1>From <span class="citation" data-cites="VenterTestingAssumptions">(Venter 1998)</span></h1>
+<blockquote>
+<p>The fact that Stanard used the simulation method consistent with the BF emergence pattern […] suggests that actuaries may be more comfortable with the BF emergence assumptions than with those of the chain ladder. Or perhaps it just means that no one would be likely to think of simulating losses by the chain ladder method.</p>
+</blockquote>
+</section><section id="about-the-package" class="slide level2">
+<h1>About the package</h1>
+<ul>
+<li>On CRAN, <a href="https://cran.r-project.org/package=imaginator">click here</a>, easy install</li>
+<li>There will probably be updates</li>
+<li>Please report bugs and suggest new features! <a href="https://github.com/PirateGrunt/imaginator/issues/new">click me</a></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install official release</span>
+<span class="kw">install.packages</span>(<span class="st">&quot;imaginator&quot;</span>)
+
+<span class="co">#install beta</span>
+devtools::<span class="kw">install_github</span>(<span class="st">&quot;PirateGrunt/imaginator&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(imaginator)</code></pre></div>
+</section></section>
+<section><section id="function-helpers" class="titleslide slide level1"><h1>Function helpers</h1></section><section id="function-helpers-1" class="slide level2">
+<h1>Function helpers</h1>
+<ul>
+<li>Use functions to create functions</li>
+<li>Function parameters are vectorized to return a list of functions</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pois5 &lt;-<span class="st"> </span><span class="kw">PoissonHelper</span>(<span class="dv">5</span>)
+pois10 &lt;-<span class="st"> </span><span class="kw">PoissonHelper</span>(<span class="dv">10</span>)
+<span class="kw">class</span>(pois10)
+## [1] &quot;function&quot;</code></pre></div>
+</section><section id="how-does-that-look" class="slide level2">
+<h1>How does that look?</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+<span class="kw">set.seed</span>(<span class="dv">1234</span>)
+
+dfClaims &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">data.frame</span>(<span class="dt">Group =</span> <span class="st">&quot;A&quot;</span>, <span class="dt">Claims =</span> <span class="kw">pois5</span>(<span class="dv">500</span>))
+                  , <span class="kw">data.frame</span>(<span class="dt">Group =</span> <span class="st">&quot;B&quot;</span>, <span class="dt">Claims =</span> <span class="kw">pois10</span>(<span class="dv">500</span>)))
+
+plt &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dfClaims, <span class="kw">aes</span>(Claims, <span class="dt">fill =</span> Group))
+plt &lt;-<span class="st"> </span>plt +<span class="st"> </span><span class="kw">geom_histogram</span>(
+    <span class="dt">binwidth =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">position =</span> <span class="st">&quot;identity&quot;</span>
+  )</code></pre></div>
+</section><section id="section" class="slide level2">
+<h1></h1>
+<p><img src="index_files/figure-revealjs/unnamed-chunk-6-1.png" width="768" /></p>
+</section><section id="vectorization" class="slide level2">
+<h1>Vectorization</h1>
+<p>Passing in a vector of parameters will return a list of functions</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pois &lt;-<span class="st"> </span><span class="kw">PoissonHelper</span>(<span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">10</span>))
+<span class="kw">summary</span>(pois)
+##      Length Class  Mode    
+## [1,] 1      -none- function
+## [2,] 1      -none- function</code></pre></div>
+</section><section id="simulating-across-the-list" class="slide level2">
+<h1>Simulating across the list</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pois &lt;-<span class="st"> </span><span class="kw">PoissonHelper</span>(<span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">10</span>))
+<span class="kw">lapply</span>(pois, function(x){
+  <span class="kw">summary</span>(<span class="kw">x</span>(<span class="dv">50</span>))
+})
+## [[1]]
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    0.00    4.00    5.00    4.94    7.00    9.00 
+## 
+## [[2]]
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    4.00    8.00   10.00   10.02   12.00   17.00</code></pre></div>
+</section></section>
+<section><section id="simulating-policies" class="titleslide slide level1"><h1>Simulating policies</h1></section><section id="simulate-policies" class="slide level2">
+<h1>Simulate Policies</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
+dfPolicies &lt;-<span class="st"> </span><span class="kw">SimulatePolicies</span>(<span class="dt">N =</span> <span class="dv">2</span>, <span class="dt">NumYears =</span> <span class="dv">5</span>)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">PolicyEffectiveDate</th>
+<th style="text-align: left;">PolicyExpirationDate</th>
+<th style="text-align: right;">Exposure</th>
+<th style="text-align: right;">PolicyholderID</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2000-02-12</td>
+<td style="text-align: left;">2001-02-10</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2000-08-16</td>
+<td style="text-align: left;">2001-08-15</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2001-02-11</td>
+<td style="text-align: left;">2002-02-10</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2001-08-16</td>
+<td style="text-align: left;">2002-08-15</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2002-02-11</td>
+<td style="text-align: left;">2003-02-10</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2002-08-16</td>
+<td style="text-align: left;">2003-08-15</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
+</section><section id="growth-and-retention" class="slide level2">
+<h1>Growth and retention</h1>
+<ul>
+<li>Retention is a number between 0 and 1, representing the % of policies which renew</li>
+<li>Growth is a non-negative number indicating the portion of new policies relative to the expiring book.</li>
+</ul>
+</section><section id="growth-and-retention-equal" class="slide level2">
+<h1>Growth and retention equal</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfPolicies &lt;-<span class="st"> </span><span class="kw">SimulatePolicies</span>(<span class="dt">N =</span> <span class="dv">100</span>
+                               , <span class="dt">NumYears =</span> <span class="dv">5</span>
+                               , <span class="dt">Retention =</span> <span class="fl">0.9</span>
+                               , <span class="dt">Growth =</span> <span class="fl">0.1</span>)</code></pre></div>
+</section><section id="section-1" class="slide level2">
+<h1></h1>
+<p><img src="index_files/figure-revealjs/unnamed-chunk-13-1.png" width="768" /></p>
+</section><section id="gradually-expanding-book" class="slide level2">
+<h1>Gradually expanding book</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfPolicies &lt;-<span class="st"> </span><span class="kw">SimulatePolicies</span>(<span class="dt">N =</span> <span class="dv">50</span>
+                               , <span class="dt">NumYears =</span> <span class="dv">10</span>
+                               , <span class="dt">Retention =</span> <span class="fl">0.9</span>
+                               , <span class="dt">Growth =</span> <span class="fl">0.2</span>)</code></pre></div>
+</section><section id="section-2" class="slide level2">
+<h1></h1>
+<p><img src="index_files/figure-revealjs/unnamed-chunk-15-1.png" width="768" /></p>
+</section><section id="gradually-contracting-book" class="slide level2">
+<h1>Gradually contracting book</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfPolicies &lt;-<span class="st"> </span><span class="kw">SimulatePolicies</span>(<span class="dt">N =</span> <span class="dv">100</span>
+                               , <span class="dt">NumYears =</span> <span class="dv">10</span>
+                               , <span class="dt">Retention =</span> <span class="fl">0.8</span>
+                               , <span class="dt">Growth =</span> <span class="fl">0.1</span>)</code></pre></div>
+</section><section id="section-3" class="slide level2">
+<h1></h1>
+<p><img src="index_files/figure-revealjs/unnamed-chunk-17-1.png" width="768" /></p>
+</section><section id="complete-turnover-every-year" class="slide level2">
+<h1>Complete turnover every year</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfPolicies &lt;-<span class="st"> </span><span class="kw">SimulatePolicies</span>(<span class="dt">N =</span> <span class="dv">100</span>
+                               , <span class="dt">NumYears =</span> <span class="dv">10</span>
+                               , <span class="dt">Retention =</span> <span class="fl">0.0</span>
+                               , <span class="dt">Growth =</span> <span class="fl">1.0</span>)</code></pre></div>
+</section><section id="section-4" class="slide level2">
+<h1></h1>
+<p><img src="index_files/figure-revealjs/unnamed-chunk-19-1.png" width="768" /></p>
+</section><section id="different-growth-and-retention-by-year" class="slide level2">
+<h1>Different growth and retention by year</h1>
+<p>Note these differences are deterministic</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfPolicies &lt;-<span class="st"> </span><span class="kw">SimulatePolicies</span>(
+    <span class="dt">N =</span> <span class="dv">100</span>
+  , <span class="dt">NumYears =</span> <span class="dv">10</span>
+  , <span class="dt">Retention =</span> <span class="kw">seq</span>(<span class="dt">length.out =</span> <span class="dv">9</span>, <span class="dt">from =</span> <span class="fl">0.95</span>, <span class="dt">to =</span> <span class="fl">0.5</span>)
+  , <span class="dt">Growth =</span> <span class="kw">seq</span>(<span class="dt">length.out =</span> <span class="dv">9</span>, <span class="dt">from =</span> <span class="fl">0.25</span>, <span class="dt">to =</span> <span class="fl">0.05</span>))</code></pre></div>
+</section><section id="section-5" class="slide level2">
+<h1></h1>
+<p><img src="index_files/figure-revealjs/unnamed-chunk-21-1.png" width="768" /></p>
+</section><section id="stochastic-growth" class="slide level2">
+<h1>Stochastic growth</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfPolicies &lt;-<span class="st"> </span><span class="kw">SimulatePolicies</span>(<span class="dt">N =</span> <span class="dv">100</span>
+                               , <span class="dt">NumYears =</span> <span class="dv">10</span>
+                               , <span class="dt">Retention =</span> <span class="fl">0.9</span>
+                               , <span class="dt">Growth =</span> <span class="kw">runif</span>(<span class="dv">9</span>, .<span class="dv">05</span>, .<span class="dv">35</span>))</code></pre></div>
+</section><section id="section-6" class="slide level2">
+<h1></h1>
+<p><img src="index_files/figure-revealjs/unnamed-chunk-23-1.png" width="768" /></p>
+</section><section id="additional-columns" class="slide level2">
+<h1>Additional columns</h1>
+<p>Used to add descriptive names for the set of policies. Theses may then be bound into a single data frame.</p>
+<p>Below, we simulate decline in one state and rapid growth in another.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfGL_CA &lt;-<span class="st"> </span><span class="kw">SimulatePolicies</span>(
+  <span class="dt">N =</span> <span class="dv">500</span>, <span class="dt">NumYears =</span> <span class="dv">5</span>, <span class="dt">Retention =</span> <span class="fl">0.75</span>, <span class="dt">Growth =</span> .<span class="dv">01</span>
+  , <span class="dt">AdditionalColumns =</span> <span class="kw">list</span>(<span class="dt">Line =</span> <span class="st">&quot;GL&quot;</span>, <span class="dt">State =</span> <span class="st">&quot;CA&quot;</span>))
+
+dfGL_NY &lt;-<span class="st"> </span><span class="kw">SimulatePolicies</span>(
+  <span class="dt">N =</span> <span class="dv">50</span>, <span class="dt">NumYears =</span> <span class="dv">5</span>, <span class="dt">Retention =</span> <span class="fl">0.9</span>, <span class="dt">Growth =</span> .<span class="dv">5</span>
+  , <span class="dt">AdditionalColumns =</span> <span class="kw">list</span>(<span class="dt">Line =</span> <span class="st">&quot;GL&quot;</span>, <span class="dt">State =</span> <span class="st">&quot;NY&quot;</span>))
+
+dfGL &lt;-<span class="st"> </span>dplyr::<span class="kw">bind_rows</span>(dfGL_CA, dfGL_NY)</code></pre></div>
+</section><section id="section-7" class="slide level2">
+<h1></h1>
+<p><img src="index_files/figure-revealjs/unnamed-chunk-25-1.png" width="768" /></p>
+</section></section>
+<section><section id="claims-by-wait-time" class="titleslide slide level1"><h1>Claims by wait time</h1></section><section id="the-algorithm" class="slide level2">
+<h1>The Algorithm</h1>
+<ul>
+<li>Start with a data frame of policies.</li>
+<li>For each row, simulate number of claims</li>
+<li>For each claim, simulate the number of transactions</li>
+<li>Simulate lags until occurrence, lag until report, lag until transaction</li>
+<li>Each transaction has a random severity</li>
+</ul>
+</section><section id="get-some-policies" class="slide level2">
+<h1>Get some policies</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">12345</span>)
+dfPolicy &lt;-<span class="st"> </span><span class="kw">SimulatePolicies</span>(<span class="dv">2</span>, <span class="dv">2001</span>:<span class="dv">2005</span>)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">PolicyEffectiveDate</th>
+<th style="text-align: left;">PolicyExpirationDate</th>
+<th style="text-align: right;">Exposure</th>
+<th style="text-align: right;">PolicyholderID</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2001-09-21</td>
+<td style="text-align: left;">2002-09-20</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2001-11-16</td>
+<td style="text-align: left;">2002-11-15</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2002-11-16</td>
+<td style="text-align: left;">2003-11-15</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2002-09-21</td>
+<td style="text-align: left;">2003-09-20</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2003-11-16</td>
+<td style="text-align: left;">2004-11-15</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
+</section><section id="now-create-some-transactions" class="slide level2">
+<h1>Now create some transactions</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfClaimTransactions &lt;-<span class="st"> </span><span class="kw">ClaimsByWaitTime</span>(
+    dfPolicy
+  , <span class="dt">ClaimFrequency =</span> <span class="kw">FixedHelper</span>(<span class="dv">2</span>)
+  , <span class="dt">PaymentFrequency =</span> <span class="kw">FixedHelper</span>(<span class="dv">3</span>)
+  , <span class="dt">OccurrenceWait =</span> <span class="kw">FixedHelper</span>(<span class="dv">10</span>)
+  , <span class="dt">ReportWait =</span> <span class="kw">FixedHelper</span>(<span class="dv">5</span>)
+  , <span class="dt">PayWait =</span> <span class="kw">FixedHelper</span>(<span class="dv">5</span>)
+  , <span class="dt">PaySeverity =</span> <span class="kw">FixedHelper</span>(<span class="dv">50</span>))</code></pre></div>
+</section><section id="and-here-they-are" class="slide level2">
+<h1>And here they are</h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">ClaimID</th>
+<th style="text-align: left;">OccurrenceDate</th>
+<th style="text-align: left;">ReportDate</th>
+<th style="text-align: left;">PaymentDate</th>
+<th style="text-align: right;">PaymentAmount</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-10-01</td>
+<td style="text-align: left;">2001-10-06</td>
+<td style="text-align: left;">2001-10-11</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-10-01</td>
+<td style="text-align: left;">2001-10-06</td>
+<td style="text-align: left;">2001-10-16</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-10-01</td>
+<td style="text-align: left;">2001-10-06</td>
+<td style="text-align: left;">2001-10-21</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">2001-10-01</td>
+<td style="text-align: left;">2001-10-06</td>
+<td style="text-align: left;">2001-10-11</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">2001-10-01</td>
+<td style="text-align: left;">2001-10-06</td>
+<td style="text-align: left;">2001-10-16</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">2001-10-01</td>
+<td style="text-align: left;">2001-10-06</td>
+<td style="text-align: left;">2001-10-21</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">2001-11-26</td>
+<td style="text-align: left;">2001-12-01</td>
+<td style="text-align: left;">2001-12-06</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">2001-11-26</td>
+<td style="text-align: left;">2001-12-01</td>
+<td style="text-align: left;">2001-12-11</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">2001-11-26</td>
+<td style="text-align: left;">2001-12-01</td>
+<td style="text-align: left;">2001-12-16</td>
+<td style="text-align: right;">50</td>
+</tr>
+</tbody>
+</table>
+<p>Some columns have been removed</p>
+</section><section id="stochastic-amounts" class="slide level2">
+<h1>Stochastic amounts</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfClaimTransactions &lt;-<span class="st"> </span><span class="kw">ClaimsByWaitTime</span>(
+    dfPolicy
+  , <span class="dt">ClaimFrequency =</span> <span class="kw">FixedHelper</span>(<span class="dv">2</span>)
+  , <span class="dt">PaymentFrequency =</span> <span class="kw">PoissonHelper</span>(<span class="dv">2</span>)
+  , <span class="dt">OccurrenceWait =</span> <span class="kw">PoissonHelper</span>(<span class="dv">10</span>)
+  , <span class="dt">ReportWait =</span> <span class="kw">PoissonHelper</span>(<span class="dv">5</span>)
+  , <span class="dt">PayWait =</span> <span class="kw">PoissonHelper</span>(<span class="dv">5</span>)
+  , <span class="dt">PaySeverity =</span> <span class="kw">LognormalHelper</span>(<span class="kw">log</span>(<span class="dv">50</span>), <span class="fl">0.5</span>*<span class="kw">log</span>(<span class="dv">50</span>)))</code></pre></div>
+</section><section id="section-8" class="slide level2">
+<h1></h1>
+<p><img src="index_files/figure-revealjs/unnamed-chunk-31-1.png" width="768" /></p>
+</section><section id="more-claims-please" class="slide level2">
+<h1>More claims, please</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfPolicy &lt;-<span class="st"> </span><span class="kw">SimulatePolicies</span>(<span class="dv">1000</span>, <span class="dv">2001</span>:<span class="dv">2005</span>)
+
+dfClaimTransactions &lt;-<span class="st"> </span><span class="kw">ClaimsByWaitTime</span>(
+    dfPolicy
+  , <span class="dt">ClaimFrequency =</span> <span class="kw">PoissonHelper</span>(<span class="dv">2</span> *<span class="st"> </span><span class="kw">seq.int</span>(<span class="dv">5</span>))
+  , <span class="dt">PaymentFrequency =</span> <span class="kw">PoissonHelper</span>(<span class="dv">2</span>)
+  , <span class="dt">OccurrenceWait =</span> <span class="kw">PoissonHelper</span>(<span class="dv">180</span>)
+  , <span class="dt">ReportWait =</span> <span class="kw">PoissonHelper</span>(<span class="dv">90</span>)
+  , <span class="dt">PayWait =</span> <span class="kw">PoissonHelper</span>(<span class="dv">45</span>)
+  , <span class="dt">PaySeverity =</span> <span class="kw">LognormalHelper</span>(<span class="kw">log</span>(<span class="dv">50</span>), <span class="fl">0.5</span>*<span class="kw">log</span>(<span class="dv">50</span>))) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">PolicyYear =</span> lubridate::<span class="kw">year</span>(PolicyEffectiveDate))
+
+dfPolicyClaims &lt;-<span class="st"> </span>dfClaimTransactions %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">NumClaims =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(ClaimID), <span class="dv">0</span>, <span class="dv">1</span>)) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(PolicyholderID, PolicyYear) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">NumClaims =</span> <span class="kw">sum</span>(NumClaims))</code></pre></div>
+</section><section id="section-9" class="slide level2">
+<h1></h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lapply</span>(<span class="kw">split</span>(dfPolicyClaims, dfPolicyClaims$PolicyYear), function(x){
+  <span class="kw">summary</span>(x$NumClaims)
+})
+## $`2001`
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   0.000   2.000   4.000   4.259   6.000  20.000 
+## 
+## $`2002`
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    0.00    1.00    4.00    4.12    6.00   16.00 
+## 
+## $`2003`
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   0.000   2.000   4.000   4.358   6.000  24.000 
+## 
+## $`2004`
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   0.000   1.000   3.000   4.186   6.000  19.000 
+## 
+## $`2005`
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   0.000   2.000   4.000   4.386   7.000  24.000</code></pre></div>
+</section><section id="section-10" class="slide level2">
+<h1></h1>
+<p><img src="index_files/figure-revealjs/unnamed-chunk-35-1.png" width="768" /></p>
+</section></section>
+<section><section id="claims-by-lag" class="titleslide slide level1"><h1>Claims by lag</h1></section><section id="claims-by-lag-1" class="slide level2">
+<h1>Claims by lag</h1>
+<ul>
+<li>Basically chain ladder for individual claims</li>
+<li>Distinguishes bewtten IBNYR and IBNER</li>
+<li>My biggest complaint is that a structure - evaluation dates - is imposed on our data</li>
+<li>Could be a gateway drug to more advanced individual claim models</li>
+<li>Lag is ambiguously defined - on purpose. It could be policy year or accident year.</li>
+<li>Does it make sense? To me, not so much. <em>However</em> just because I can’t see the math, doesn’t mean that it isn’t there.</li>
+</ul>
+</section><section id="first-generate-ibnyr-data" class="slide level2">
+<h1>First generate IBNYR data</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">12345</span>)
+dfPolicy &lt;-<span class="st"> </span><span class="kw">SimulatePolicies</span>(<span class="dv">2</span>, <span class="dv">2001</span>:<span class="dv">2004</span>)
+
+dfIBNYR_Fixed &lt;-<span class="st"> </span><span class="kw">ClaimsByFirstReport</span>(
+    dfPolicy
+  , <span class="dt">Frequency =</span> <span class="kw">FixedHelper</span>(<span class="dv">4</span>:<span class="dv">1</span>)
+  , <span class="dt">PaymentSeverity =</span> <span class="kw">FixedHelper</span>(<span class="kw">rep</span>(<span class="dv">250</span>, <span class="dv">4</span>))
+  , <span class="dt">Lags =</span> <span class="dv">1</span>:<span class="dv">4</span>)</code></pre></div>
+</section><section id="section-11" class="slide level2">
+<h1></h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">PolicyholderID</th>
+<th style="text-align: left;">PolicyEffectiveDate</th>
+<th style="text-align: right;">ClaimID</th>
+<th style="text-align: right;">Lag</th>
+<th style="text-align: right;">PaymentAmount</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-09-21</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">250</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-09-21</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">250</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-09-21</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">250</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-09-21</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">250</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-09-21</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">250</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-09-21</td>
+<td style="text-align: right;">34</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">250</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-09-21</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">250</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-09-21</td>
+<td style="text-align: right;">57</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">250</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-09-21</td>
+<td style="text-align: right;">58</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">250</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-09-21</td>
+<td style="text-align: right;">73</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">250</td>
+</tr>
+</tbody>
+</table>
+</section><section id="our-ibnyr-count-triangle---complete" class="slide level2">
+<h1>Our IBNYR count triangle - complete</h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">PolicyholderID</th>
+<th style="text-align: right;">PolicyYear</th>
+<th style="text-align: right;">1</th>
+<th style="text-align: right;">2</th>
+<th style="text-align: right;">3</th>
+<th style="text-align: right;">4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2002</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2003</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2004</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2002</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2003</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2004</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+</section><section id="and-incomplete" class="slide level2">
+<h1>… and incomplete</h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">PolicyholderID</th>
+<th style="text-align: right;">PolicyYear</th>
+<th style="text-align: left;">1</th>
+<th style="text-align: left;">2</th>
+<th style="text-align: left;">3</th>
+<th style="text-align: left;">4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2001</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2002</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2003</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2004</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2001</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2002</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2003</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2004</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</section><section id="payments" class="slide level2">
+<h1>Payments</h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">PolicyholderID</th>
+<th style="text-align: right;">PolicyYear</th>
+<th style="text-align: left;">1</th>
+<th style="text-align: left;">2</th>
+<th style="text-align: left;">3</th>
+<th style="text-align: left;">4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2001</td>
+<td style="text-align: left;">1000</td>
+<td style="text-align: left;">750</td>
+<td style="text-align: left;">500</td>
+<td style="text-align: left;">250</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2002</td>
+<td style="text-align: left;">1000</td>
+<td style="text-align: left;">750</td>
+<td style="text-align: left;">500</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2003</td>
+<td style="text-align: left;">1000</td>
+<td style="text-align: left;">750</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2004</td>
+<td style="text-align: left;">1000</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2001</td>
+<td style="text-align: left;">1000</td>
+<td style="text-align: left;">750</td>
+<td style="text-align: left;">500</td>
+<td style="text-align: left;">250</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2002</td>
+<td style="text-align: left;">1000</td>
+<td style="text-align: left;">750</td>
+<td style="text-align: left;">500</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2003</td>
+<td style="text-align: left;">1000</td>
+<td style="text-align: left;">750</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2004</td>
+<td style="text-align: left;">1000</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</section><section id="now-develop-the-claims" class="slide level2">
+<h1>Now develop the claims</h1>
+<p>ClaimsByLinkRatio takes a data frame of claims by Lag and develops them as appropriate.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfClaimsFixed &lt;-<span class="st"> </span><span class="kw">ClaimsByLinkRatio</span>(
+    dfIBNYR_Fixed
+  , <span class="dt">Links =</span> <span class="kw">FixedHelper</span>(<span class="kw">c</span>(<span class="dv">2</span>, <span class="fl">1.5</span>, <span class="fl">1.25</span>))
+  , <span class="dt">Lags =</span> <span class="dv">1</span>:<span class="dv">4</span>)</code></pre></div>
+</section><section id="section-12" class="slide level2">
+<h1></h1>
+<p>Note that we now have more than one observation for each claim</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">PolicyholderID</th>
+<th style="text-align: left;">PolicyEffectiveDate</th>
+<th style="text-align: right;">ClaimID</th>
+<th style="text-align: right;">Lag</th>
+<th style="text-align: right;">PaymentAmount</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-09-21</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">250.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-09-21</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">500.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-09-21</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">750.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2001-09-21</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">937.5</td>
+</tr>
+</tbody>
+</table>
+</section><section id="add-some-variation" class="slide level2">
+<h1>Add some variation</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfIBNYR_Variable &lt;-<span class="st"> </span><span class="kw">ClaimsByFirstReport</span>(
+    dfPolicy
+  , <span class="dt">Frequency =</span> <span class="kw">PoissonHelper</span>(<span class="dv">4</span>:<span class="dv">1</span>)
+  , <span class="dt">PaymentSeverity =</span> <span class="kw">GammaHelper</span>(<span class="kw">rep</span>(<span class="dv">1500</span>, <span class="dv">4</span>), <span class="kw">rep</span>(<span class="dv">5</span>,<span class="dv">4</span>))
+  , <span class="dt">Lags =</span> <span class="dv">1</span>:<span class="dv">4</span>)
+
+dfClaimsVariable &lt;-<span class="st"> </span><span class="kw">ClaimsByLinkRatio</span>(
+    dfIBNYR_Variable
+  , <span class="dt">Links =</span> <span class="kw">GammaHelper</span>(<span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>), <span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">18</span>))
+  , <span class="dt">Lags =</span> <span class="dv">1</span>:<span class="dv">4</span>)</code></pre></div>
+</section></section>
+<section><section id="making-triangles" class="titleslide slide level1"><h1>Making triangles</h1></section><section id="claims-by-lag-2" class="slide level2">
+<h1>Claims by lag</h1>
+<p>You’re pretty much done, unless you want to aggregate the results</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfAgg &lt;-<span class="st"> </span>dfClaimsVariable %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">PolicyYear =</span> lubridate::<span class="kw">year</span>(PolicyEffectiveDate)) %&gt;%<span class="st"> </span>
+<span class="st">  </span>dplyr::<span class="kw">filter</span>(PolicyYear +<span class="st"> </span>Lag -<span class="st"> </span><span class="dv">1</span> &lt;=<span class="st"> </span><span class="dv">2004</span>) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(PolicyYear, Lag) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">Paid =</span> <span class="kw">sum</span>(PaymentAmount)
+            , <span class="dt">ClaimCount =</span> <span class="kw">n</span>())</code></pre></div>
+</section><section id="section-13" class="slide level2">
+<h1></h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">PolicyYear</th>
+<th style="text-align: right;">Lag</th>
+<th style="text-align: right;">Paid</th>
+<th style="text-align: right;">ClaimCount</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4194.4898</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">12812.4488</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">19544.7604</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">20718.3283</td>
+<td style="text-align: right;">29</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2002</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">894.7109</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2002</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3893.3006</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2002</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">7734.5361</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2003</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1529.1519</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2003</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4475.5000</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2004</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2078.8361</td>
+<td style="text-align: right;">7</td>
+</tr>
+</tbody>
+</table>
+</section><section id="claims-by-wait-time-1" class="slide level2">
+<h1>Claims by wait time</h1>
+<p>We need to impose an evaluation date structure on the data</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">first_eval &lt;-<span class="st"> </span><span class="kw">min</span>(dfClaimTransactions$PolicyEffectiveDate)
+lubridate::<span class="kw">month</span>(first_eval) &lt;-<span class="st"> </span><span class="dv">12</span>
+lubridate::<span class="kw">day</span>(first_eval) &lt;-<span class="st"> </span><span class="dv">31</span>
+
+last_eval &lt;-<span class="st"> </span><span class="kw">max</span>(dfClaimTransactions$PaymentDate, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+lubridate::<span class="kw">month</span>(last_eval) &lt;-<span class="st"> </span><span class="dv">12</span>
+lubridate::<span class="kw">day</span>(last_eval) &lt;-<span class="st"> </span><span class="dv">31</span>
+evalDates &lt;-<span class="st"> </span><span class="kw">seq.Date</span>(<span class="dt">from =</span> first_eval, <span class="dt">to =</span> last_eval, <span class="dt">by =</span> <span class="st">&quot;year&quot;</span>)
+evalDates
+## [1] &quot;2001-12-31&quot; &quot;2002-12-31&quot; &quot;2003-12-31&quot; &quot;2004-12-31&quot; &quot;2005-12-31&quot;
+## [6] &quot;2006-12-31&quot; &quot;2007-12-31&quot;</code></pre></div>
+</section><section id="and-then-aggregate" class="slide level2">
+<h1>And then aggregate</h1>
+<p>Just a bit of jiu-jitsu</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ComposeDiagonal &lt;-<span class="st"> </span>function(df, eval_date){
+  df &lt;-<span class="st"> </span>df %&gt;%<span class="st"> </span>
+<span class="st">    </span>dplyr::<span class="kw">filter</span>(PaymentDate &lt;=<span class="st"> </span>eval_date) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">PolicyYear =</span> lubridate::<span class="kw">year</span>(PolicyEffectiveDate)
+           , <span class="dt">Lag =</span> lubridate::<span class="kw">year</span>(eval_date) -<span class="st"> </span>PolicyYear +<span class="st"> </span><span class="dv">1</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(PolicyYear, Lag) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">PaymentAmount =</span> <span class="kw">sum</span>(PaymentAmount, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))
+}
+
+dfTriangle &lt;-<span class="st"> </span><span class="kw">lapply</span>(evalDates, function(x){
+  <span class="kw">ComposeDiagonal</span>(dfClaimTransactions, x)
+})
+dfTriangle &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, dfTriangle)</code></pre></div>
+</section><section id="and-we-have-a-triangle" class="slide level2">
+<h1>And we have a triangle</h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">PolicyYear</th>
+<th style="text-align: right;">Lag</th>
+<th style="text-align: right;">PaymentAmount</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">66464.06</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1198941.36</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1242390.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1242390.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1242390.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1242390.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1242390.00</td>
+</tr>
+</tbody>
+</table>
+</section><section id="but-hang-on" class="slide level2">
+<h1>But, hang on</h1>
+<p>Why are you creating triangles?</p>
+<p>Individual claim data contains all of the features that you need to build a model.</p>
+</section><section id="section-14" class="slide level2">
+<h1></h1>
+<p>Create a chain ladder by forming cumulative amounts and lagging</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfChainLadder &lt;-<span class="st"> </span>dfClaimsVariable %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(ClaimID, Lag) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(ClaimID) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">CumulativePaid =</span> <span class="kw">cumsum</span>(PaymentAmount)
+         , <span class="dt">PriorCumulative =</span> dplyr::<span class="kw">lag</span>(CumulativePaid))</code></pre></div>
+</section><section id="how-does-that-look-1" class="slide level2">
+<h1>How does that look?</h1>
+<p><img src="index_files/figure-revealjs/unnamed-chunk-51-1.png" width="768" /></p>
+</section><section id="and-aggregate" class="slide level2">
+<h1>And aggregate</h1>
+<p><img src="index_files/figure-revealjs/unnamed-chunk-52-1.png" width="768" /></p>
+</section><section id="section-15" class="slide level2">
+<h1></h1>
+<p><img src="index_files/figure-revealjs/unnamed-chunk-53-1.png" width="768" /><img src="index_files/figure-revealjs/unnamed-chunk-53-2.png" width="768" /></p>
+</section><section id="and-remember" class="slide level2">
+<h1>And remember</h1>
+<ul>
+<li>We had to drop a number of points in the chart because they were IBNYR claims, i.e. they had no prior cumulative.</li>
+<li>Common aggregate triangles miss this.</li>
+</ul>
+</section><section id="triangles-for-wait-time" class="slide level2">
+<h1>Triangles for wait time</h1>
+<p>This slide will be complete by the time I present.</p>
+</section></section>
+<section><section id="wrapping-up" class="titleslide slide level1"><h1>Wrapping up</h1></section><section id="go-forth-and-simulate" class="slide level2">
+<h1>Go forth and simulate!</h1>
+<ul>
+<li>If you have individual claim data, <strong>start using it!</strong></li>
+<li>If you don’t have enough, simulate as a starting point to study the dynamics</li>
+<li>If you curious about “what if”, <code>imaginator</code> can help you contemplate scenarios</li>
+<li>Want more features? Make suggestions on GitHub: <a href="https://github.com/PirateGrunt/imaginator/issues/new">click me</a></li>
+</ul>
+</section><section id="thank-you" class="slide level2">
+<h1>Thank you!</h1>
+<p>The source code for these slides may be found here: <a href="https://github.com/PirateGrunt/clrs_2017_imaginator" class="uri">https://github.com/PirateGrunt/clrs_2017_imaginator</a></p>
+</section><section id="bibliography" class="slide level2 unnumbered">
+<h1>Bibliography</h1>
+<div id="refs" class="references">
+<div id="ref-Vaughn">
+<p>Richard L. Vaughan, FSA, FCAS. 1998. “Some Extensions of J. N. Stanard’s Simulation Model for Loss Reserving.” <a href="https://www.casact.org/pubs/forum/98fforum/vaughn.pdf" class="uri">https://www.casact.org/pubs/forum/98fforum/vaughn.pdf</a>.</p>
+</div>
+<div id="ref-Stanard">
+<p>Stanard, James N. 1985. “A Simulation Test of Prediction Errors of Loss Reserve Estimation Techniques.” <a href="https://www.casact.org/pubs/proceed/proceed85/85124.pdf" class="uri">https://www.casact.org/pubs/proceed/proceed85/85124.pdf</a>.</p>
+</div>
+<div id="ref-VenterTestingAssumptions">
+<p>Venter, Gary. 1998. “Testing the Assumptions of Age-to-Age Factors.” <a href="https://www.casact.org/pubs/proceed/proceed98/980807.pdf" class="uri">https://www.casact.org/pubs/proceed/proceed98/980807.pdf</a>.</p>
+</div>
+</div>
+</section></section>
+    </div>
+  </div>
+
+  <script src="index_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="index_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'index_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+          { src: 'index_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>

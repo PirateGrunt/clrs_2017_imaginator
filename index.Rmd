@@ -1,26 +1,30 @@
 ---
 author: "Brian A. Fannin"
-date: "September ??, 2017"
 bibliography: bibliography.bib
-output: 
+date: "September ??, 2017"
+nocite: "@Vaughn, \n"
+output:
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
   revealjs::revealjs_presentation:
-    self_contained: false
+    center: no
     css: ./css/revealOpts.css
+    reveal_options:
+      previewLinks: yes
+      slideNumber: yes
+    reveal_plugins:
+    - notes
+    - zoom
+    self_contained: no
     theme: solarized
     transition: slide
-    center: false
-    reveal_plugins: ["notes", "zoom"]
-    reveal_options:
-      slideNumber: true
-      previewLinks: true
-nocite: |
-  @Vaughn, 
 ---
 
 ```{r include=FALSE}
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(knitr))
-knitr::opts_chunk$set(collapse = TRUE)
+knitr::opts_chunk$set(collapse = TRUE, warning = FALSE, message = FALSE)
 ```
 
 # imaginator: An R Package for Detailed Claim Simulation
@@ -659,9 +663,7 @@ pltAgg
 
 ## Triangles for wait time
 
-```{r}
-print("Put a plot of wait times in here")
-```
+This slide will be complete by the time I present.
 
 # Wrapping up
 
